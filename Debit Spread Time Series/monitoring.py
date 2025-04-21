@@ -45,7 +45,8 @@ class Monitoring():
         latest_close = 50 #asset_data["Close"].iloc[-1]
         latest_50_day_MA = 70 #asset_data["50_day_MA"].iloc[-1]
         latest_100_day_MA = 30 #asset_data["100_day_MA"].iloc[-1]
-        condition = config.trading_condition(latest_close, latest_50_day_MA, latest_100_day_MA)
+        #condition = config.trading_condition(latest_close, latest_50_day_MA, latest_100_day_MA)
+        condition = True
         if condition == True:
             conf_int = self.model.model(asset_data, parameters)
             strike_list_lower_boundary = round(conf_int[0][0])
@@ -98,14 +99,17 @@ class Monitoring():
                     })
             
             spreads = pd.DataFrame(spreads)
+            """
             spreads = spreads[
                 (spreads["Long_Strike"] < spreads["Short_Strike"]) &
                 (spreads["Short_Strike"] > asset_data.iloc[-1]["Close"]) &
                 (spreads["Max_Profit"] > spreads["Max_Loss"])
             ]
+            """
             spreads = spreads.dropna()
             if not spreads.empty:
-                self.report.create_notification_email_possible_trade(spreads, asset)
+                message = f"Suitable Call Debit Spreads for{asset}\n<pre>{spreads.to_string(index=False)}</pre>"
+                self.report.send_telegram_message(message)
 
 
     def opened_positions_monitoring(self, _, spread):
@@ -119,15 +123,15 @@ class Monitoring():
         current_spread_price = long_call_option.bid - short_call_option.bid
 
         # Condition for closing loosing position
-        #condition_for_closing_loosing_position = config.closing_loosing_position_condition(current_spread_price, spread_max_loss, spread_max_profit)
-        condition_for_closing_loosing_position = True
+        condition_for_closing_loosing_position = config.closing_loosing_position_condition(current_spread_price, spread_max_loss, spread_max_profit)
+        #condition_for_closing_loosing_position = True
         if condition_for_closing_loosing_position == True:
             self.order.close_call_debit_spread(spread, -1)
 
         # Condition for closing profitable position
-        condition_for_closing_profitable_position = True
-        if condition_for_closing_profitable_position == True:
-            self.order.close_call_debit_spread(spread, 1)
+        #condition_for_closing_profitable_position = True
+        #if condition_for_closing_profitable_position == True:
+        #    self.order.close_call_debit_spread(spread, 1)
            
 
   

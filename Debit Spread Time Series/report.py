@@ -3,6 +3,10 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import requests
 import config
+import telegram
+from telegram.constants import ParseMode
+from io import BytesIO
+import asyncio
 
 class Report():
 
@@ -12,8 +16,9 @@ class Report():
         self.telegram_bot_url = f"https://api.telegram.org/bot{self.telegram_bot_token}/sendMessage"
 
     def send_telegram_message(self, message):
-        payload = {"chat_id": self.telegram_chat_id, "text": message}
+        payload = {"chat_id": self.telegram_chat_id, "text": message, "parse_mode": "HTML"}
         requests.post(self.telegram_bot_url, data=payload)
+        
 
     def send_email(self, subject, body, to_email):
         smtp_server = "smtp.gmail.com"

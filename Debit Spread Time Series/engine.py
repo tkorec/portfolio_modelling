@@ -35,6 +35,7 @@ import config
 
 
 ib = IB()
+ib.RequestTimeout = 30
 ib.connect("127.0.0.1", 7497, clientId=config.CLIENT_ID)
 
 monitoring = Monitoring(ib)
@@ -109,7 +110,7 @@ def run_once_daily():
     now = datetime.datetime.now()
     current_hour = now.hour
 
-    if not (18 <= current_hour < 20):
+    if not (18 <= current_hour < 21):
         #print(f"[{now}] Skipping daily run — outside of time window.")
         return # Early exit! It doesn't run monitor_positions_and_orders()
     

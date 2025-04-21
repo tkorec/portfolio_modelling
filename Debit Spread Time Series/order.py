@@ -53,12 +53,12 @@ class Order():
 
             combo = Contract()
             combo.symbol = long_opt.symbol
-            combo.secId = "BAG"
+            #combo.secId = "BAG"
             combo.currency = long_opt.currency
             combo.exchange = long_contract.exchange
             combo.comboLegs = [
-                ComboLeg(conId=long_opt.conId, ratio=1, action="SELL", exchange=long_contract.exchange, openClose=1),
-                ComboLeg(conId=short_opt.conId, ratio=1, action="BUY", exchange=short_contract.exchange, openClose=1)
+                ComboLeg(conId=short_opt.conId, ratio=1, action="BUY", exchange=short_contract.exchange, openClose=1),
+                ComboLeg(conId=long_opt.conId, ratio=1, action="SELL", exchange=long_contract.exchange, openClose=1)
             ]
             order = LimitOrder("SELL", long_opt.multiplier, limit_price, transmit=True)
             trade = self.ib.placeOrder(combo, order)

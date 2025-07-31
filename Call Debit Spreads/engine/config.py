@@ -1,7 +1,4 @@
-TELEGRAM_BOT_TOKEN = "8168423265:AAFJQsQyWH38AcogXY_AKjSytHbszF7DajM"
-TELEGRAM_CHAT_ID = "8013174314"
-SENDER_PASSWORD = "dapvfjrbeeqcuyen"
-CLIENT_ID = 1122
+
 
 def trading_condition(latest_close, latest_50_day_MA, latest_100_day_MA):
     condition = (latest_50_day_MA > latest_100_day_MA) and (latest_close > latest_100_day_MA) and (latest_close < latest_50_day_MA)
